@@ -1,0 +1,12 @@
+{
+  "name": "csv-reporter-for-kfsa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "xlsx": "^0.13.2"
+  }
+}
