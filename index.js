@@ -173,5 +173,5 @@
   const output = getOutputObject(userInfo, itemInfo, rawData)
   
   // write file
-  fs.writeFileSync('./output.xls', output, 'utf8')
+  fs.writeFileSync('./output.csv', output, 'utf8')
 })()
