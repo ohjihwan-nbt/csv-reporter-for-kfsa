@@ -47,7 +47,7 @@
         // I: 이메일
         let value = userInfoFromSheet[key].v
         const firstCharacter = key[0]
-        
+
         switch (firstCharacter) {
           case 'A': 
             if(!isNaN(value)) currentUserId = value, userInfo[currentUserId] = {}
@@ -173,5 +173,7 @@
   const output = getOutputObject(userInfo, itemInfo, rawData)
   
   // write file
-  fs.writeFileSync('./output.csv', output, 'utf8')
+  fs.writeFileSync('./output.xls', output, 'utf8')
+
+  // 파일 오픈 시 엑셀을 먼저 연 다음 Ctrl(cmd) + O 를 통해 파일을 열어 사용해주세요.
 })()
