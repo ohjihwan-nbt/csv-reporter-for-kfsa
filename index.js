@@ -125,10 +125,11 @@
     if(!(userInfo && itemInfo && rawData)) return
   
     const lastNumber = Math.max(...Object.keys(itemInfo).map(item => Number(item)))
+    const SEPERATOR = '\t'
   
     let csvHeader = 'userId'
-    for(let item in itemInfo) csvHeader += `,${item}`
-    csvHeader += ',점수,응시직종,접수일시,성명,휴대폰,소방본부/직종/학교,소방서/지부/학과,대상물명,이메일'
+    for(let item in itemInfo) csvHeader += `${SEPERATOR}${item}`
+    csvHeader += `${SEPERATOR}점수${SEPERATOR}응시직종${SEPERATOR}접수일시${SEPERATOR}성명${SEPERATOR}휴대폰${SEPERATOR}소방본부/직종/학교${SEPERATOR}소방서/지부/학과${SEPERATOR}대상물명${SEPERATOR}이메일`
   
     // userId별 row 생성
     let csvRow = ''
@@ -144,19 +145,19 @@
         const currentQuizAnswer = rawData[user][quizNumber] || 0
         
         if(answerInfo && currentQuizAnswer === answerInfo.answer) {
-          csvRow += ',O'
+          csvRow += `${SEPERATOR}O`
           score += answerInfo.score
         } else {
-          csvRow += ',X'
+          csvRow += `${SEPERATOR}X`
         }
       }
   
       // 점수 작성
-      csvRow += `,${score}`
+      csvRow += `${SEPERATOR}${score}`
   
       // 응시직종 ~ 이메일까지 사용자 정보 추가
       for(let currentUser in userInfo[user]) {
-        csvRow += `,${userInfo[user][currentUser]}`
+        csvRow += `${SEPERATOR}${userInfo[user][currentUser]}`
       }
       
       csvRow += '\n'
@@ -175,5 +176,6 @@
   // write file
   fs.writeFileSync('./output.xls', output, 'utf8')
 
+  console.info('output.xls write complete.')
   // 파일 오픈 시 엑셀을 먼저 연 다음 Ctrl(cmd) + O 를 통해 파일을 열어 사용해주세요.
 })()
