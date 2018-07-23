@@ -1,4 +1,5 @@
 (_=>{
+  const startTime = Date.now()
   const XLSX = require('xlsx')
   const fs = require('fs')
   const buffer = fs.readFileSync('input.xlsx')
@@ -146,5 +147,6 @@
   
   fs.writeFileSync('./output.xls', output, 'utf8')
 
-  console.info('output.xls write complete.')
+  const consumedTimeInSeconds = (Date.now() - startTime) / 1000
+  console.info(`output.xls write has completed in ${consumedTimeInSeconds} seconds.`)
 })()
