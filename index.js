@@ -1,8 +1,9 @@
 (_=>{
+  const [,,inputExcelFileName = 'input.xlsx', outputFileNameWithoutExtension = 'output'] = process.argv
   const startTime = Date.now()
   const XLSX = require('xlsx')
   const fs = require('fs')
-  const buffer = fs.readFileSync('input.xlsx')
+  const buffer = fs.readFileSync(inputExcelFileName)
   const workBooks = XLSX.read(buffer, {type: 'buffer'})
   
   const {
@@ -15,7 +16,7 @@
     const firstCharacter = str[0]
     return firstCharacter.charCodeAt() >= startOf.charCodeAt() && firstCharacter.charCodeAt() <= endOf.charCodeAt()
   }
-  
+
   const getUserInfoFromSheetData = userInfoFromSheet => {
     const userInfo = {}
     let currentUserId = undefined
@@ -27,7 +28,7 @@
 
         switch (firstCharacter) {
           case 'A': 
-            if(!isNaN(value)) currentUserId = value, userInfo[currentUserId] = {}
+            if(!isNaN(String(value).trim())) currentUserId = value, userInfo[currentUserId] = {}
             break
           default: 
             const currentUserInfo = userInfo[currentUserId] || {}
@@ -98,6 +99,8 @@
     return rawData
   }
   
+  const isInvalidValue = value => value === ' ' || isNaN(value)
+  
   const getOutputObject = (userInfo, itemInfo, rawData) => {
     if(!(userInfo && itemInfo && rawData)) return
   
@@ -112,12 +115,14 @@
     let score
   
     for(let user in userInfo) {
+      if(isInvalidValue(user)) continue
+      
       score = 0
       csvRow += user
   
       for(let quizNumber = 1; quizNumber <= lastNumber; quizNumber++) {
         const answerInfo = itemInfo[quizNumber]
-        const currentQuizAnswer = rawData[user][quizNumber] || 0
+        const currentQuizAnswer = rawData[user] && rawData[user][quizNumber] || 0
         
         if(answerInfo && currentQuizAnswer === answerInfo.answer) {
           csvRow += `${SEPERATOR}O`
@@ -145,8 +150,8 @@
   
   const output = getOutputObject(userInfo, itemInfo, rawData)
   
-  fs.writeFileSync('./output.xls', output, 'utf8')
+  fs.writeFileSync(`./${outputFileNameWithoutExtension}.xls`, output, 'utf8')
 
   const consumedTimeInSeconds = (Date.now() - startTime) / 1000
-  console.info(`output.xls write has completed in ${consumedTimeInSeconds} seconds.`)
+  console.info(`${outputFileNameWithoutExtension}.xls write has completed in ${consumedTimeInSeconds} seconds.`)
 })()
