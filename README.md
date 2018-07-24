@@ -46,7 +46,13 @@
 **프로그램 실행**
 ---
 
-위 파일을 작성한 뒤 node에서 index.js 파일을 호출하면 output.xls 파일이 해당 디렉토리에 생성됩니다.
+우선 `npm i` 명령을 통해 노드 패키지를 로컬 머신에 설치합니다.
+
+사전에 필요한 엑셀 input 파일을 규칙에 맞게 작성한 뒤, node에서 index.js 파일을 실행하면 output.xls 파일이 해당 디렉토리에 생성됩니다.
+
+아래 코드처럼 input파일과 output파일을 선택 인자로 전달할 수 있습니다. 만약 전달하지 않으면 기본값은 각각 input.xlsx, output.xls로 작성됩니다.
+
+`node index [inputExcelFileFullPath(with extension)] [outputExcelFileName(without extension)]`
 
 우선 엑셀을 먼저 실행시킨 뒤, 파일열기 기능을 통해 방금 생성된 output.xls 파일을 열어줍니다.
 
@@ -57,5 +63,7 @@
 만약 엑셀 프로그램이 아닌 구글 드라이브의 스프레드시트를 통해 파일을 열면 별 처리 없이 즉시 오픈됩니다.
 
 열어본 파일이 정상적으로 보이는지 확인합니다.
+
+확인 후 가공하여 xlsx 파일 포맷으로 지정하여 새로 저장, 최종 보고서 파일을 수동으로 생성합니다.
 
 
