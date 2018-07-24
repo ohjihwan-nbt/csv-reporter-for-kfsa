@@ -20,6 +20,10 @@
 
 응답한번호가 -1인 경우, 수동으로 전처리를 하거나 kibana에서 애초에 -1인것은 제외한 뒤 raw export 처리해야합니다.
 
+아래의 쿼리를 참고하여 해당 조건에 알맞는 raw data를 추출해 주세요.
+
+`error: 0 AND optionNumber:> 0`
+
 
 2. user_info
 
