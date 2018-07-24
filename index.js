@@ -16,6 +16,20 @@
     const firstCharacter = str[0]
     return firstCharacter.charCodeAt() >= startOf.charCodeAt() && firstCharacter.charCodeAt() <= endOf.charCodeAt()
   }
+  
+  const getParticipantsList = rawDataFromSheet => {
+    const participantsList = []
+
+    for(let key in rawDataFromSheet) {
+      const value = rawDataFromSheet[key].v
+
+      if(key[0] === 'A' && !participantsList.includes(value) && !isNaN(value)) {
+        participantsList.push(value)
+      }
+    }
+    
+    return participantsList
+  }
 
   const getUserInfoFromSheetData = userInfoFromSheet => {
     const userInfo = {}
@@ -101,8 +115,8 @@
   
   const isInvalidValue = value => value === ' ' || isNaN(value)
   
-  const getOutputObject = (userInfo, itemInfo, rawData) => {
-    if(!(userInfo && itemInfo && rawData)) return
+  const getOutputObject = (participantsList, userInfo, itemInfo, rawData) => {
+    if(!(participantsList && userInfo && itemInfo && rawData)) return
   
     const lastNumber = Math.max(...Object.keys(itemInfo).map(item => Number(item)))
     const SEPERATOR = '\t'
@@ -116,6 +130,7 @@
   
     for(let user in userInfo) {
       if(isInvalidValue(user)) continue
+      else if(!participantsList.includes(Number(user))) continue
       
       score = 0
       csvRow += user
@@ -132,7 +147,7 @@
         }
       }
   
-      csvRow += `${SEPERATOR}${score}`
+      csvRow += `${SEPERATOR}${parseFloat(score).toFixed(1)}`
   
       for(let currentUser in userInfo[user]) {
         csvRow += `${SEPERATOR}${userInfo[user][currentUser]}`
@@ -147,8 +162,9 @@
   const userInfo = getUserInfoFromSheetData(userInfoFromSheet)
   const itemInfo = getItemInfoFromSheetData(itemInfoFromSheet)
   const rawData = getRawDataFromSheet(rawDataFromSheet)
+  const participantsList = getParticipantsList(rawDataFromSheet)
   
-  const output = getOutputObject(userInfo, itemInfo, rawData)
+  const output = getOutputObject(participantsList, userInfo, itemInfo, rawData)
   
   fs.writeFileSync(`./${outputFileNameWithoutExtension}.xls`, output, 'utf8')
 
