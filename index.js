@@ -17,20 +17,6 @@
     return firstCharacter.charCodeAt() >= startOf.charCodeAt() && firstCharacter.charCodeAt() <= endOf.charCodeAt()
   }
   
-  const getParticipantsList = rawDataFromSheet => {
-    const participantsList = []
-
-    for(let key in rawDataFromSheet) {
-      const value = rawDataFromSheet[key].v
-
-      if(key[0] === 'A' && !participantsList.includes(value) && !isNaN(value)) {
-        participantsList.push(value)
-      }
-    }
-    
-    return participantsList
-  }
-
   const getUserInfoFromSheetData = userInfoFromSheet => {
     const userInfo = {}
     let currentUserId = undefined
@@ -112,6 +98,20 @@
   
     return rawData
   }
+
+  const getParticipantsList = rawDataFromSheet => {
+    const participantsList = []
+
+    for(let key in rawDataFromSheet) {
+      const value = rawDataFromSheet[key].v
+
+      if(key[0] === 'A' && !participantsList.includes(value) && !isNaN(value)) {
+        participantsList.push(value)
+      }
+    }
+    
+    return participantsList
+  }
   
   const isInvalidValue = value => value === ' ' || isNaN(value)
   
@@ -163,7 +163,7 @@
   const itemInfo = getItemInfoFromSheetData(itemInfoFromSheet)
   const rawData = getRawDataFromSheet(rawDataFromSheet)
   const participantsList = getParticipantsList(rawDataFromSheet)
-  
+
   const output = getOutputObject(participantsList, userInfo, itemInfo, rawData)
   
   fs.writeFileSync(`./${outputFileNameWithoutExtension}.xls`, output, 'utf8')
